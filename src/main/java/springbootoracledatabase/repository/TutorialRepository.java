@@ -1,7 +1,7 @@
 package springbootoracledatabase.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import springbootoracledatabase.model.Tutorial;
+import springbootoracledatabase.entity.Tutorial;
 
 import java.util.List;
 
