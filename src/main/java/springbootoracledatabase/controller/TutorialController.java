@@ -4,9 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springbootoracledatabase.model.Tutorial;
+import springbootoracledatabase.entity.Tutorial;
 import springbootoracledatabase.repository.TutorialRepository;
 
 import java.util.ArrayList;
@@ -23,9 +24,7 @@ public class TutorialController {
     TutorialRepository tutorialRepository;
 
 
-
-
-    @GetMapping("/tutorials")
+    @GetMapping(value = "/tutorials", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
         try {
             logger.info("Getting all tutorials...");
@@ -48,8 +47,8 @@ public class TutorialController {
         }
     }
 
-    @GetMapping("/tutorials/{id}")
-    public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
+    @GetMapping(value = "/tutorials/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id, Tutorial tutorial) {
         try {
             Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
             logger.info("Getting tutorial by ID: {}", id);
@@ -69,13 +68,13 @@ public class TutorialController {
 
     }
 
-    @PostMapping("/tutorials")
+    @PostMapping(value = "/tutorials", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
         try {
             logger.info("Creating a new tutorial: {}", tutorial.getTitle());
 
             Tutorial _tutorial = tutorialRepository
-                    .save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false, new Date()));
+                    .save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false, new Date(), tutorial.getUsername(), tutorial.getPassword(), tutorial.getRoles()));
 
             logger.info("Tutorial created with ID: {}", _tutorial.getId());
 
@@ -86,7 +85,7 @@ public class TutorialController {
         }
     }
 
-    @PutMapping("/tutorials/{id}")
+    @PutMapping(value = "/tutorials/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
         try {
             logger.info("Updating tutorial with ID: {}", id);
@@ -109,11 +108,13 @@ public class TutorialController {
             }
         } catch (Exception e) {
             logger.error("Error occurred while updating tutorial with ID: {}", id, e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/tutorials/{id}")
+
+    @DeleteMapping(value = "/tutorials/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
         try {
             logger.info("Deleting tutorial with ID: {}", id);
@@ -126,7 +127,7 @@ public class TutorialController {
         }
     }
 
-    @DeleteMapping("/tutorials")
+    @DeleteMapping(value = "/tutorials", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<HttpStatus> deleteAllTutorials() {
         try {
             logger.info("Deleting all tutorials");
@@ -139,7 +140,7 @@ public class TutorialController {
         }
     }
 
-    @GetMapping("/tutorials/published")
+    @GetMapping(value = "/tutorials/published", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Tutorial>> findByPublished() {
         try {
             logger.info("Finding tutorials by published status");
@@ -158,6 +159,8 @@ public class TutorialController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }
 
 
