@@ -39,6 +39,7 @@ public class TutorialController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             logger.info("Retrieved {} tutorials.", tutorials.size());
+            logger.info("Retrieved {} tutorials.", tutorials.size());
 
             return new ResponseEntity<>(tutorials, HttpStatus.OK);
         } catch (Exception e) {
