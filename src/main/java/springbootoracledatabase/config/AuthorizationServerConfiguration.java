@@ -1,40 +1,53 @@
 package springbootoracledatabase.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.SecurityFilterChain;
 import springbootoracledatabase.service.UserDetailsServiceImpl;
 
+import javax.sql.DataSource;
+
 @Configuration
-public class SecurityConfig {
+public class AuthorizationServerConfiguration implements AuthorizationServerConfigurer {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-         http.csrf().disable()
-                .authorizeHttpRequests()
-                .antMatchers("/tutorials/**")
-                .hasRole("ADMIN")
-                .antMatchers("/emps/**")
-                .authenticated().and().httpBasic();
-       return http.build();
+    TokenStore jdbcTokenStore() {
+        return new JdbcTokenStore(dataSource);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.checkTokenAccess("isAuthenticated()").tokenKeyAccess("permitAll()");
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(new UserDetailsServiceImpl());
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
     }
 
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        endpoints.tokenStore(jdbcTokenStore());
+        endpoints.authenticationManager(authenticationManager);
+    }
 }
