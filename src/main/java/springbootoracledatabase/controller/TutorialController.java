@@ -58,6 +58,8 @@ public class TutorialController {
                 return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
             } else {
                 logger.info("Tutorial with ID {} not found.", id);
+                logger.info("Tutorial with ID {} not found.", id);
+                logger.info("Tutorial with ID {} not found.", id);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
