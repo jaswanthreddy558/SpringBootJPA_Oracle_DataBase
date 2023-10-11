@@ -65,6 +65,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+            <version>3.1.0</version> <!-- 2.7.7 for Spring Boot 2.x -->
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
     <build>
