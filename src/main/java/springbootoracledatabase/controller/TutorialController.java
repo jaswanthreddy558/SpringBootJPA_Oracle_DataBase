@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import springbootoracledatabase.entity.BookStore;
 import springbootoracledatabase.service.TutorialService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -60,5 +61,11 @@ public class TutorialController {
     public ResponseEntity<List<BookStore>> findByPublished() {
         logger.info("Request received to find tutorials by published status.");
         return tutorialService.findByPublished();
+    }
+
+    @GetMapping("/getIpAddress")
+    public String getClientIpAddress(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        return "Client IP Address: " + ipAddress;
     }
 }

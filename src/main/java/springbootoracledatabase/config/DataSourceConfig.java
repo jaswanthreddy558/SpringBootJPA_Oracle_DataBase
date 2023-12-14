@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -30,5 +34,14 @@ public class DataSourceConfig {
         dataSourceBuilder.username(dataSourceUsername);
         dataSourceBuilder.password(dataSourcePassword);
         return dataSourceBuilder.build();
+    }
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("springbootoracledatabase.controller"))
+                .paths(PathSelectors.any())
+                .build();
     }
 }
