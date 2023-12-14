@@ -27,11 +27,7 @@ public class TutorialController {
         return tutorialService.getAllTutorials(title);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BookStore> getTutorialById(@PathVariable("id") long id) {
-        logger.info("Request received to get tutorial by ID: {}", id);
-        return tutorialService.getBookStoreById(id);
-    }
+
 
     @PostMapping("/api/tutorials")
     public ResponseEntity<BookStore> createTutorial(@RequestBody BookStore tutorial) {
