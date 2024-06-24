@@ -10,7 +10,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
 @Configuration
 public class DataSourceConfig {
@@ -27,7 +26,7 @@ public class DataSourceConfig {
     private String dataSourceDriverClassName;
 
     @Bean
-    public DataSource getDataSource() throws SQLException {
+    public DataSource getDataSource() throws Exception {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName(dataSourceDriverClassName);
         dataSourceBuilder.url(dataSourceUrl);
