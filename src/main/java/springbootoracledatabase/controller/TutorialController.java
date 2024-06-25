@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springbootoracledatabase.entity.BookStore;
+import springbootoracledatabase.exception.ResourceNotFoundException;
 import springbootoracledatabase.service.TutorialService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,11 +23,10 @@ public class TutorialController {
     private TutorialService tutorialService;
 
     @GetMapping("/api/BookStores")
-    public ResponseEntity<List<BookStore>> getAllTutorials(@RequestParam(required = false) String title) {
+    public ResponseEntity<List<BookStore>> getAllTutorials(@RequestParam(required = false) String title) throws ResourceNotFoundException {
         logger.info("Request received to get all tutorials.");
         return tutorialService.getAllTutorials(title);
     }
-
 
 
     @PostMapping("/api/tutorials")
@@ -63,5 +63,10 @@ public class TutorialController {
     public String getClientIpAddress(HttpServletRequest request) {
         String ipAddress = request.getRemoteAddr();
         return "Client IP Address: " + ipAddress;
+    }
+
+    @GetMapping("/newString")
+    public String sampleString(HttpServletRequest request) {
+        return "Hello VHS APP";
     }
 }

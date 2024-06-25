@@ -50,6 +50,7 @@ public class BookStore implements Serializable {
         this.published = published;
         this.createdAt = createdAt;
         this.username = username;
+        this.password = password;
         this.roles = roles;
 
     }

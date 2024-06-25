@@ -12,6 +12,4 @@ public class SpringBootOracleDatabaseApplication {
         SpringApplication.run(SpringBootOracleDatabaseApplication.class, args);
 
 
-	}
-
 }
